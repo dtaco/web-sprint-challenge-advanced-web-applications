@@ -5,14 +5,21 @@ const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
+  const { articles, currentArticleId, setCurrentArticleId, updateArticle, postArticle } = props;
   // ✨ where are my props? Destructure them here
 
   useEffect(() => {
     // ✨ implement
-    // Every time the `currentArticle` prop changes, we should check it for truthiness:
+    if(currentArticleId){
+      const currentArticle = articles.filter((article) => article.article_id === currentArticleId);
+      setValues(currentArticle[0])
+    } else {
+      setValues(initialFormValues);
+    }
+    // Every time the `currentArticlID` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
-  })
+  }, [currentArticleId])
 
   const onChange = evt => {
     const { id, value } = evt.target
@@ -22,13 +29,31 @@ export default function ArticleForm(props) {
   const onSubmit = evt => {
     evt.preventDefault()
     // ✨ implement
+    if(currentArticleId){
+      let article_data = {
+        article: values,
+        article_id: currentArticleId,
+      }
+      setValues(initialFormValues);
+      return updateArticle(article_data);
+    } else {
+      postArticle(values);
+      setValues(initialFormValues);
+    }
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
   }
 
   const isDisabled = () => {
     // ✨ implement
+    return !(values.text && values.topic && values.title);
     // Make sure the inputs have some values
+  }
+
+  const cancelEdit = (evt) => {
+    evt.preventDefault();
+    setCurrentArticleId();
+    setValues(initialFormValues)
   }
 
   return (
@@ -58,7 +83,7 @@ export default function ArticleForm(props) {
       </select>
       <div className="button-group">
         <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button onClick={Function.prototype}>Cancel edit</button>
+        <button onClick={(evt) => cancelEdit(evt)}>Cancel edit</button>
       </div>
     </form>
   )

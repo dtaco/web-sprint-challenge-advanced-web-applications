@@ -26,7 +26,7 @@ export default function App() {
     // ✨ implement
     localStorage.removeItem('token');
     // If a token is in local storage it should be removed,
-    setMessage('Goodbye');
+    setMessage('Goodbye!');
     // and a message saying "Goodbye!" should be set in its proper state.
     redirectToLogin();
     // In any case, we should redirect the browser back to the login screen,
@@ -149,7 +149,7 @@ export default function App() {
             <>
               <ArticleForm 
                 articles={articles}
-                currentArticle={currentArticleId}
+                currentArticleId={currentArticleId}
                 setCurrentArticleId={setCurrentArticleId}
                 updateArticle={updateArticle}
                 postArticle={postArticle}
