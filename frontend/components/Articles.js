@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
 
 export default function Articles(props) {
@@ -22,7 +21,13 @@ export default function Articles(props) {
     // ✨ grab the articles here, on first render only
   }, [])
 
-  
+  function disabled() {
+    if(!token){
+      return true
+    } else{
+      return false
+    }
+  }
 
   return (
     // ✨ fix the JSX: replace `Function.prototype` with actual functions
@@ -30,9 +35,9 @@ export default function Articles(props) {
     <div className="articles">
       <h2>Articles</h2>
       {
-        ![].length
+        !articles.length
           ? 'No articles yet'
-          : [].map(art => {
+          : articles.map(art => {
             return (
               <div className="article" key={art.article_id}>
                 <div>
@@ -41,8 +46,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={!token ? true : false} onClick={() => setCurrentArticleId(art.article_id)}>Edit</button>
-                  <button disabled={!token ? true : false} onClick={() => deleteArticle(art.article_id)}>Delete</button>
+                  <button disabled={disabled()} onClick={() => setCurrentArticleId(art.article_id)}>Edit</button>
+                  <button disabled={disabled()} onClick={() => deleteArticle(art.article_id)}>Delete</button>
                 </div>
               </div>
             )
